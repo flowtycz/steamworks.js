@@ -1,6 +1,6 @@
 {
-    "name": "steamworks.js",
-    "version": "0.3.2",
+    "name": "steamdoesntwork.js",
+    "version": "0.3.3",
     "main": "index.js",
     "types": "index.d.ts",
     "napi": {
@@ -43,6 +43,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/ceifa/steamworks.js"
+        "url": "https://github.com/flowtycz/steamworks.js"
     }
 }
