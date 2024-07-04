@@ -22,6 +22,11 @@ impl PlayerSteamId {
 
 #[napi]
 pub mod localplayer {
+    use std::io::Cursor;
+
+    use base64::{engine::general_purpose, Engine};
+    use image::{ImageBuffer, RgbaImage};
+
     use super::PlayerSteamId;
 
     #[napi]
@@ -35,6 +40,59 @@ pub mod localplayer {
     pub fn get_name() -> String {
         let client = crate::client::get_client();
         client.friends().name()
+    }
+
+    #[napi]
+    pub fn get_medium_avatar() -> Option<String> {
+        let client = crate::client::get_client();
+        let steam_id = client.user().steam_id();
+        let avatar = client.friends().get_friend(steam_id).medium_avatar();
+
+        match avatar {
+            Some(data) => {
+                let image = RgbaImage::from_raw(64, 64, data).unwrap();
+
+                let mut bytes: Vec<u8> = Vec::new();
+                image
+                    .write_to(&mut Cursor::new(&mut bytes), image::ImageFormat::Png)
+                    .expect("Couldn't write image to bytes.");
+
+                let b64 = general_purpose::STANDARD.encode(bytes);
+                return Some(b64);
+            },
+            None => {
+            },
+        }
+        
+
+        return None
+    }
+
+    
+    #[napi]
+    pub fn get_large_avatar() -> Option<String> {
+        let client = crate::client::get_client();
+        let steam_id = client.user().steam_id();
+        let avatar = client.friends().get_friend(steam_id).large_avatar();
+
+        match avatar {
+            Some(data) => {
+                let image = RgbaImage::from_raw(184, 184, data).unwrap();
+
+                let mut bytes: Vec<u8> = Vec::new();
+                image
+                    .write_to(&mut Cursor::new(&mut bytes), image::ImageFormat::Png)
+                    .expect("Couldn't write image to bytes.");
+
+                let b64 = general_purpose::STANDARD.encode(bytes);
+                return Some(b64);
+            },
+            None => {
+            },
+        }
+        
+
+        return None
     }
 
     #[napi]
