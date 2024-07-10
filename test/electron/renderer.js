@@ -9,21 +9,26 @@ let status = null;
 let handle = null;
 
 document.getElementById('1').addEventListener('click', function() {
-    handle = client.inventory.requestInventoryItems();
-    console.log(handle);
+    // handle = client.inventory.requestInventoryItems();
+    // console.log(handle);
+    let items = client.inventory.getItemsWithPrices()
+
+    let steamID = client.localplayer.getSteamId();
+    console.log(steamID);
+
+    console.log(items);
 })
 
+let apiCall = 0;
 document.getElementById('2').addEventListener('click', function() {
-    let item_count = client.inventory.getResultItemsCount(handle);
+    apiCall = client.inventory.startPurchase([100], [3]);
 
-    console.log(item_count);
-
-    let items = client.inventory.getResultItemsNCount(handle, 1);
-    console.log(items);
+    console.log(apiCall);
 })
 
 document.getElementById('3').addEventListener('click', function() {
-    let items = client.inventory.getResultItemsAll(handle);
-    console.log(items);
+    let result = client.utils.isApiCallCompleted(apiCall);
+
+    console.log(result);
 })
 

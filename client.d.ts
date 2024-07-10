@@ -6,9 +6,13 @@ export interface PlayerSteamId {
   steamId32: string
   accountId: number
 }
+export interface SteamItemWithPrice {
+  iDefinition: SteamItemDef_t
+  price: bigint
+}
 export interface SteamItemDetails {
   mItemId: SteamItemInstanceID
-  mIDefinition: SteamItemDef
+  mIDefinition: SteamItemDef_t
   mUnQuantity: number
   mUnFlags: number
 }
@@ -207,6 +211,7 @@ export namespace utils {
   export function getAppId(): number
   export function getServerRealTime(): number
   export function isSteamRunningOnSteamDeck(): boolean
+  export function isApiCallCompleted(call: bigint): boolean
 }
 export namespace workshop {
   export interface UgcResult {
@@ -438,5 +443,6 @@ export namespace inventory {
   export function generateTestItem(): SteamInventoryResult_t
   export function getResultItemsCount(restultHandle: SteamInventoryResult_t): number
   export function getResultItemsAll(restultHandle: SteamInventoryResult_t): Array<SteamItemDetails>
-  export function getResultItemsNCount(restultHandle: SteamInventoryResult_t, n: number): Array<SteamItemDetails>
+  export function getItemsWithPrices(): Array<SteamItemWithPrice>
+  export function startPurchase(items: Array<SteamItemDef_t>, quantities: Array<number>): SteamAPICall_t
 }
