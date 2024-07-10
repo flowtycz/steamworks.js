@@ -25,7 +25,7 @@ pub mod localplayer {
     use std::io::Cursor;
 
     use base64::{engine::general_purpose, Engine};
-    use image::{ImageBuffer, RgbaImage};
+    use image::RgbaImage;
 
     use super::PlayerSteamId;
 

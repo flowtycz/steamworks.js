@@ -6,6 +6,12 @@ export interface PlayerSteamId {
   steamId32: string
   accountId: number
 }
+export interface SteamItemDetails {
+  mItemId: SteamItemInstanceID
+  mIDefinition: SteamItemDef
+  mUnQuantity: number
+  mUnFlags: number
+}
 export namespace achievement {
   export function activate(achievement: string): boolean
   export function isActivated(achievement: string): boolean
@@ -424,4 +430,13 @@ export namespace workshop {
   export function getItems(items: Array<bigint>, queryConfig?: WorkshopItemQueryConfig | undefined | null): Promise<WorkshopItemsResult>
   export function getAllItems(page: number, queryType: UGCQueryType, itemType: UGCType, creatorAppId: number, consumerAppId: number, queryConfig?: WorkshopItemQueryConfig | undefined | null): Promise<WorkshopPaginatedResult>
   export function getUserItems(page: number, accountId: number, listType: UserListType, itemType: UGCType, sortOrder: UserListOrder, creatorAppId: number, consumerAppId: number, queryConfig?: WorkshopItemQueryConfig | undefined | null): Promise<WorkshopPaginatedResult>
+}
+export namespace inventory {
+  export function requestInventoryItems(): SteamInventoryResult_t
+  export function getResultStatus(restultHandle: SteamInventoryResult_t): number
+  export function destroyInventoryResult(restultHandle: SteamInventoryResult_t): void
+  export function generateTestItem(): SteamInventoryResult_t
+  export function getResultItemsCount(restultHandle: SteamInventoryResult_t): number
+  export function getResultItemsAll(restultHandle: SteamInventoryResult_t): Array<SteamItemDetails>
+  export function getResultItemsNCount(restultHandle: SteamInventoryResult_t, n: number): Array<SteamItemDetails>
 }

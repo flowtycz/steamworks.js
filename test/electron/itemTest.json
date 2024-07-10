@@ -1,0 +1,16 @@
+{
+	"appid": 3097530,
+	"items": [
+	{
+		"itemdefid": 100,
+		"type":  "item",
+		"name": "Hat decoration",
+		"description": "Hat decoration description",
+		"price": "1;USD99",
+		"name_color":  "7D6D00",
+		"background_color":  "3C352E",
+		"tradable": true,
+		"marketable": true
+	}
+	]
+}
