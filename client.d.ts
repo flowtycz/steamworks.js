@@ -440,9 +440,10 @@ export namespace inventory {
   export function requestInventoryItems(): SteamInventoryResult_t
   export function getResultStatus(restultHandle: SteamInventoryResult_t): number
   export function destroyInventoryResult(restultHandle: SteamInventoryResult_t): void
-  export function generateTestItem(): SteamInventoryResult_t
+  export function generateTestItem(items: Array<SteamItemDef_t>): SteamInventoryResult_t
   export function getResultItemsCount(restultHandle: SteamInventoryResult_t): number
   export function getResultItemsAll(restultHandle: SteamInventoryResult_t): Array<SteamItemDetails>
   export function getItemsWithPrices(): Array<SteamItemWithPrice>
   export function startPurchase(items: Array<SteamItemDef_t>, quantities: Array<number>): SteamAPICall_t
+  export function exchangeItems(pArrayGenerate: Array<SteamItemDef_t>, punArrayGenerateQuantity: Array<uint32>, unArrayGenerateLength: uint32, pArrayDestroy: Array<SteamItemInstanceID>, punArrayDestroyQuantity: Array<uint32>, unArrayDestroyLength: uint32): SteamInventoryResult_t
 }

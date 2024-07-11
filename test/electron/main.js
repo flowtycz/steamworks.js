@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron')
-const steamworks = require('steamworks.js')
+const steamworks = require('steamworks.js');
+const client = steamworks.init(3097530);
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -34,4 +35,4 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit()
 })
 
-steamworks.electronEnableSteamOverlay()
+require('steamworks.js').electronEnableSteamOverlay()

@@ -41,9 +41,9 @@ impl SteamItemDetails {
 pub mod inventory {
     use std::ptr::null_mut;
 
-    use steamworks_sys::{ uint64, SteamAPICall_t, SteamAPI_ISteamInventory_DestroyResult, SteamAPI_ISteamInventory_GenerateItems, SteamAPI_ISteamInventory_GetAllItems, SteamAPI_ISteamInventory_GetItemsWithPrices, SteamAPI_ISteamInventory_GetNumItemsWithPrices, SteamAPI_ISteamInventory_GetResultItems, SteamAPI_ISteamInventory_GetResultStatus, SteamAPI_ISteamInventory_RequestPrices, SteamAPI_ISteamInventory_StartPurchase, SteamAPI_SteamInventory_v003, SteamInventoryResult_t, SteamItemDef_t, SteamItemDetails_t};
+    use steamworks_sys::{ uint32, uint64, SteamAPICall_t, SteamAPI_ISteamInventory_DestroyResult, SteamAPI_ISteamInventory_ExchangeItems, SteamAPI_ISteamInventory_GenerateItems, SteamAPI_ISteamInventory_GetAllItems, SteamAPI_ISteamInventory_GetItemsWithPrices, SteamAPI_ISteamInventory_GetNumItemsWithPrices, SteamAPI_ISteamInventory_GetResultItems, SteamAPI_ISteamInventory_GetResultStatus, SteamAPI_ISteamInventory_RequestPrices, SteamAPI_ISteamInventory_StartPurchase, SteamAPI_SteamInventory_v003, SteamInventoryResult_t, SteamItemDef_t, SteamItemDetails_t};
 
-    use super::{SteamItemDetails, SteamItemWithPrice};
+    use super::{SteamItemDetails, SteamItemInstanceID, SteamItemWithPrice};
 
     #[napi]
     pub fn request_inventory_items() -> SteamInventoryResult_t {
@@ -77,15 +77,13 @@ pub mod inventory {
     }
 
     #[napi]
-    pub fn generate_test_item() -> SteamInventoryResult_t {
+    pub fn generate_test_item(items: Vec<SteamItemDef_t>) -> SteamInventoryResult_t {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
 
             let mut result_handle:SteamInventoryResult_t = 0;
-            const ITEMS: [SteamItemDef_t; 1] = [100];
-            let raw = &ITEMS as *const SteamItemDef_t;
             
-            SteamAPI_ISteamInventory_GenerateItems(inventory, &mut result_handle, raw, null_mut(), 1);
+            SteamAPI_ISteamInventory_GenerateItems(inventory, &mut result_handle, items.as_ptr(), null_mut(), items.len().try_into().unwrap());
 
             return result_handle;
         }
@@ -145,7 +143,6 @@ pub mod inventory {
             SteamAPI_ISteamInventory_GetItemsWithPrices(inventory, items.as_mut_ptr(), prices.as_mut_ptr(), base_prices.as_mut_ptr(), item_count);
 
             let result_items = items.iter().zip(prices).map(|(item, price)| SteamItemWithPrice::from_callback(*item, price)).collect();
-
             return result_items;
         }
     }
@@ -154,18 +151,39 @@ pub mod inventory {
     pub fn start_purchase(items: Vec<SteamItemDef_t>, quantities: Vec<u32>) -> SteamAPICall_t {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
-
-            items.iter().zip(quantities.clone()).for_each(|(item, amount)| println!("Item: {item} x {amount}"));
-
             let count:u32 = quantities.len().try_into().unwrap();
 
-            println!("Coutn: {count}");
-
             let result = SteamAPI_ISteamInventory_StartPurchase(inventory, items.as_ptr() as *const _, quantities.as_ptr() as *const _, count);
-
-
             return result;
         }
     }
 
+    #[napi]
+    pub fn exchange_items(
+        p_array_generate: Vec<SteamItemDef_t>, 
+        pun_array_generate_quantity: Vec<uint32>, 
+        un_array_generate_length: uint32,
+        p_array_destroy: Vec<SteamItemInstanceID>,
+        pun_array_destroy_quantity: Vec<uint32>, 
+        un_array_destroy_length: uint32) -> SteamInventoryResult_t {
+        unsafe {
+            let mut handle: SteamInventoryResult_t = 0;
+            let inventory = SteamAPI_SteamInventory_v003();
+
+            let array_destroy: Vec<u64> = p_array_destroy.iter().map(|item_id| item_id.get_u64().1).collect();
+
+            SteamAPI_ISteamInventory_ExchangeItems(
+                inventory, 
+                &mut handle, 
+                p_array_generate.as_ptr(), 
+                pun_array_generate_quantity.as_ptr(), 
+                un_array_generate_length, 
+                array_destroy.as_ptr(), 
+                pun_array_destroy_quantity.as_ptr(), 
+                un_array_destroy_length
+            );
+
+            return handle;
+        }
+    }
 }
