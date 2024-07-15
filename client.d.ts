@@ -6,6 +6,16 @@ export interface PlayerSteamId {
   steamId32: string
   accountId: number
 }
+export interface SteamItemWithPrice {
+  iDefinition: SteamItemDef_t
+  price: bigint
+}
+export interface SteamItemDetails {
+  mItemId: SteamItemInstanceID
+  mIDefinition: SteamItemDef_t
+  mUnQuantity: number
+  mUnFlags: number
+}
 export namespace achievement {
   export function activate(achievement: string): boolean
   export function isActivated(achievement: string): boolean
@@ -201,6 +211,7 @@ export namespace utils {
   export function getAppId(): number
   export function getServerRealTime(): number
   export function isSteamRunningOnSteamDeck(): boolean
+  export function isApiCallCompleted(call: bigint): boolean
 }
 export namespace workshop {
   export interface UgcResult {
@@ -424,4 +435,15 @@ export namespace workshop {
   export function getItems(items: Array<bigint>, queryConfig?: WorkshopItemQueryConfig | undefined | null): Promise<WorkshopItemsResult>
   export function getAllItems(page: number, queryType: UGCQueryType, itemType: UGCType, creatorAppId: number, consumerAppId: number, queryConfig?: WorkshopItemQueryConfig | undefined | null): Promise<WorkshopPaginatedResult>
   export function getUserItems(page: number, accountId: number, listType: UserListType, itemType: UGCType, sortOrder: UserListOrder, creatorAppId: number, consumerAppId: number, queryConfig?: WorkshopItemQueryConfig | undefined | null): Promise<WorkshopPaginatedResult>
+}
+export namespace inventory {
+  export function requestInventoryItems(): SteamInventoryResult_t
+  export function getResultStatus(restultHandle: SteamInventoryResult_t): number
+  export function destroyInventoryResult(restultHandle: SteamInventoryResult_t): void
+  export function generateTestItem(items: Array<SteamItemDef_t>): SteamInventoryResult_t
+  export function getResultItemsCount(restultHandle: SteamInventoryResult_t): number
+  export function getResultItemsAll(restultHandle: SteamInventoryResult_t): Array<SteamItemDetails>
+  export function getItemsWithPrices(): Array<SteamItemWithPrice>
+  export function startPurchase(items: Array<SteamItemDef_t>, quantities: Array<number>): SteamAPICall_t
+  export function exchangeItems(pArrayGenerate: Array<SteamItemDef_t>, punArrayGenerateQuantity: Array<uint32>, unArrayGenerateLength: uint32, pArrayDestroy: Array<SteamItemInstanceID>, punArrayDestroyQuantity: Array<uint32>, unArrayDestroyLength: uint32): SteamInventoryResult_t
 }

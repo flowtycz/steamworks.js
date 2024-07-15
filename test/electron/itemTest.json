@@ -1,0 +1,55 @@
+{
+    "appid": 3097530,
+    "items": [
+        {
+            "itemdefid": 100,
+            "type": "item",
+            "name": "Hat decoration",
+            "description": "Hat decoration description",
+            "price": "1;USD99",
+            "name_color": "7D6D00",
+            "background_color": "3C352E",
+            "item_slot": "decoration",
+            "icon_url": "https://icons.veryicon.com/png/o/miscellaneous/development-platform/64x64-conversion.png",
+            "icon_url_large": "https://icons.veryicon.com/png/o/miscellaneous/development-platform/64x64-conversion.png",
+            "tradable": true,
+            "marketable": true
+        },
+        {
+            "itemdefid": 101,
+            "type": "item",
+            "name": "Hat",
+            "description": "Hat description",
+            "price": "1;USD150",
+            "name_color": "7D6D00",
+            "background_color": "3C352E",
+            "item_slot": "decoration",
+            "icon_url": "https://icons.veryicon.com/png/o/miscellaneous/development-platform/64x64-conversion.png",
+            "icon_url_large": "https://icons.veryicon.com/png/o/miscellaneous/development-platform/64x64-conversion.png",
+            "tradable": true,
+            "marketable": true
+        },
+        {
+            "itemdefid": 200,
+            "type": "item",
+            "name": "Hat Case",
+            "description": "Hat Case description",
+            "price": "1;USD5000",
+            "name_color": "7D6D00",
+            "background_color": "3C352E",
+            "item_slot": "decoration",
+            "icon_url": "https://icons.veryicon.com/png/o/miscellaneous/development-platform/64x64-conversion.png",
+            "icon_url_large": "https://icons.veryicon.com/png/o/miscellaneous/development-platform/64x64-conversion.png",
+            "tradable": true,
+            "marketable": true
+        },
+        {
+            "itemdefid": 300,
+            "type": "generator",
+            "name": "Case crafting",
+            "description": "Converts case to a generator",
+            "exchange": "200",
+            "bundle": "201x1;100x6;101x3"
+        }
+    ]
+}
