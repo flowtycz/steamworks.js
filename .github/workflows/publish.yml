@@ -48,6 +48,10 @@ jobs:
 
             - run: cargo install cargo-xwin --locked
 
+            - name: Dependencies
+
+            - run: sudo apt install musl-tools
+
             - name: Node install
               run: npm ci
 
