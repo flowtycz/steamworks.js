@@ -47,14 +47,12 @@ jobs:
             - uses: Swatinem/rust-cache@v2
 
             - run: cargo install cargo-xwin --locked
+            
             - name: dependencies
               run: sudo apt install musl-tools 
             - name: llvm
               run: sudo apt install llvm llvm-lib
-
-            - name: dependencies
-              run: sudo apt-install 
-
+              
             - name: Node install
               run: npm ci
 
