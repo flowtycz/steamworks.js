@@ -2,11 +2,10 @@ use napi::bindgen_prelude::BigInt;
 use napi_derive::napi;
 use steamworks_sys::{uint64, SteamItemDef_t, SteamItemDetails_t};
 
-pub type SteamItemInstanceID = BigInt;
 
 #[napi(object)]
 pub struct SteamItemWithPrice {
-    pub i_definition: SteamItemDef_t,
+    pub i_definition: i32,
     pub price: BigInt,
 }
 impl SteamItemWithPrice {
@@ -21,8 +20,8 @@ impl SteamItemWithPrice {
 #[derive(Debug)]
 #[napi(object)]
 pub struct SteamItemDetails {
-    pub m_item_id: SteamItemInstanceID,
-    pub m_i_definition: SteamItemDef_t,
+    pub m_item_id: BigInt,
+    pub m_i_definition: i32,
     pub m_un_quantity: u16,
     pub m_un_flags: u16,
 }
@@ -41,12 +40,14 @@ impl SteamItemDetails {
 pub mod inventory {
     use std::ptr::null_mut;
 
-    use steamworks_sys::{ uint32, uint64, SteamAPICall_t, SteamAPI_ISteamInventory_DestroyResult, SteamAPI_ISteamInventory_ExchangeItems, SteamAPI_ISteamInventory_GenerateItems, SteamAPI_ISteamInventory_GetAllItems, SteamAPI_ISteamInventory_GetItemsWithPrices, SteamAPI_ISteamInventory_GetNumItemsWithPrices, SteamAPI_ISteamInventory_GetResultItems, SteamAPI_ISteamInventory_GetResultStatus, SteamAPI_ISteamInventory_RequestPrices, SteamAPI_ISteamInventory_StartPurchase, SteamAPI_SteamInventory_v003, SteamInventoryResult_t, SteamItemDef_t, SteamItemDetails_t};
+    
+    use napi::bindgen_prelude::BigInt;
+    use steamworks_sys::{ uint64, SteamAPI_ISteamInventory_DestroyResult, SteamAPI_ISteamInventory_ExchangeItems, SteamAPI_ISteamInventory_GenerateItems, SteamAPI_ISteamInventory_GetAllItems, SteamAPI_ISteamInventory_GetItemsWithPrices, SteamAPI_ISteamInventory_GetNumItemsWithPrices, SteamAPI_ISteamInventory_GetResultItems, SteamAPI_ISteamInventory_GetResultStatus, SteamAPI_ISteamInventory_RequestPrices, SteamAPI_ISteamInventory_StartPurchase, SteamAPI_SteamInventory_v003, SteamInventoryResult_t, SteamItemDef_t, SteamItemDetails_t};
 
-    use super::{SteamItemDetails, SteamItemInstanceID, SteamItemWithPrice};
+    use super::{SteamItemDetails, SteamItemWithPrice};
 
     #[napi]
-    pub fn request_inventory_items() -> SteamInventoryResult_t {
+    pub fn request_inventory_items() -> i32 {
         unsafe {
             let mut handle: SteamInventoryResult_t = 0;
             let inventory = SteamAPI_SteamInventory_v003();
@@ -58,7 +59,7 @@ pub mod inventory {
     }
 
     #[napi]
-    pub fn get_result_status(restult_handle: SteamInventoryResult_t) -> i32 {
+    pub fn get_result_status(restult_handle: i32) -> i32 {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
             
@@ -68,7 +69,7 @@ pub mod inventory {
     }
 
     #[napi]
-    pub fn destroy_inventory_result(restult_handle: SteamInventoryResult_t) {
+    pub fn destroy_inventory_result(restult_handle: i32) {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
             
@@ -77,7 +78,7 @@ pub mod inventory {
     }
 
     #[napi]
-    pub fn generate_test_item(items: Vec<SteamItemDef_t>) -> SteamInventoryResult_t {
+    pub fn generate_test_item(items: Vec<i32>) -> i32 {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
 
@@ -90,7 +91,7 @@ pub mod inventory {
     }
 
     #[napi]
-    pub fn get_result_items_count(restult_handle: SteamInventoryResult_t) -> u32 {
+    pub fn get_result_items_count(restult_handle: i32) -> u32 {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
 
@@ -103,7 +104,7 @@ pub mod inventory {
     }
 
     #[napi]
-    pub fn get_result_items_all(restult_handle: SteamInventoryResult_t) -> Vec<SteamItemDetails> {
+    pub fn get_result_items_all(restult_handle: i32) -> Vec<SteamItemDetails> {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
 
@@ -148,7 +149,7 @@ pub mod inventory {
     }
 
     #[napi]
-    pub fn start_purchase(items: Vec<SteamItemDef_t>, quantities: Vec<u32>) -> SteamAPICall_t {
+    pub fn start_purchase(items: Vec<i32>, quantities: Vec<u32>) -> u64 {
         unsafe {
             let inventory = steamworks_sys::SteamAPI_SteamInventory_v003();
             let count:u32 = quantities.len().try_into().unwrap();
@@ -160,12 +161,12 @@ pub mod inventory {
 
     #[napi]
     pub fn exchange_items(
-        p_array_generate: Vec<SteamItemDef_t>, 
-        pun_array_generate_quantity: Vec<uint32>, 
-        un_array_generate_length: uint32,
-        p_array_destroy: Vec<SteamItemInstanceID>,
-        pun_array_destroy_quantity: Vec<uint32>, 
-        un_array_destroy_length: uint32) -> SteamInventoryResult_t {
+        p_array_generate: Vec<i32>, 
+        pun_array_generate_quantity: Vec<u32>, 
+        un_array_generate_length: u32,
+        p_array_destroy: Vec<BigInt>,
+        pun_array_destroy_quantity: Vec<u32>, 
+        un_array_destroy_length: u32) -> i32 {
         unsafe {
             let mut handle: SteamInventoryResult_t = 0;
             let inventory = SteamAPI_SteamInventory_v003();
