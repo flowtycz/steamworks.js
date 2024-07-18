@@ -46,7 +46,7 @@ jobs:
 
             - uses: Swatinem/rust-cache@v2
 
-            - run: cargo install cargo-xwin
+            - run: cargo install cargo-xwin --locked
 
             - name: Node install
               run: npm ci
